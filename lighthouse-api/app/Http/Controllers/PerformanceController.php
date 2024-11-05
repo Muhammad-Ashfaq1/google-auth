@@ -14,8 +14,9 @@ class PerformanceController extends Controller {
             'strategy' => strtolower($request->platform),
             'key' => config('constant.google_api_key'),
         ]);
-
-        Log::info('API Response:', ['response' => $response->json()]);
-        return response()->json(['performance' => $response->json()['lighthouseResult']['categories']['performance']['score']]);
+        $data = $response->json();
+        Log::info('API Response:', ['response' => $data]);
+        $score = @$data['lighthouseResult']['categories']['performance']['score'] ?? 0;
+        return response()->json(['performance' => $score * 100]);
     }
 }

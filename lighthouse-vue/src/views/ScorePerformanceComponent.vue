@@ -18,6 +18,7 @@
                 </div>
 
                 <button @click="checkPerformance" class="seo-tools__button">Go&nbsp;<i class="fas fa-angle-double-right"></i></button>
+                <button @click="logout" class="seo-tools__button">Logout&nbsp;<i class="fas fa-angle-double-right fa-sign-out-alt"></i></button>
             </div>
 
             <div class="seo-tools__results seo-tools__hidden-block" >
@@ -48,23 +49,33 @@ export default {
         async checkPerformance() {
             this.loading = true;
 
-            if (!this.token) {
-                this.$router.push({ name: 'LoginView' });
-            }
-            try {
-                const response = await axios.post(
-                    'http://localhost:8000/api/performance',
-                    { url: this.url, platform: this.platform },
-                    { headers: { Authorization: `Bearer ${this.token}` } }
-                );
-                this.performanceScore = response.data.performance;
-            } catch (error) {
-                console.error('Error fetching performance score:', error);
-            }
-        },
-    }
+      if (!this.token) {
+        this.$router.push({ name: 'LoginView' });
+        return; // Ensure no further code runs if no token
+      }
+
+      try {
+        const response = await axios.post(
+            'http://localhost:8000/api/performance',
+            { url: this.url, platform: this.platform },
+            { headers: { Authorization: `Bearer ${this.token}` } }
+        );
+        this.performanceScore = response.data.performance;
+      } catch (error) {
+        console.error('Error fetching performance score:', error);
+      } finally {
+        this.loading = false; // Ensure loading state is reset
+      }
+    },
+    logout() {
+      localStorage.removeItem('token'); // Clear the token from local storage
+      this.token = null; // Reset token in component data
+      this.$router.push({ name: 'LoginView' }); // Redirect to the login view
+    },
+  }
 }
 </script>
+
 
 
 <style scoped>
