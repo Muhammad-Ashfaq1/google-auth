@@ -1,19 +1,4 @@
 <template>
-  <!-- <div id="app">
-    <button v-if="!token" @click="loginWithGoogle">Log in with Google</button>
-    <div v-if="token">
-      <h2>Website Performance Check</h2>
-      <input type="text" v-model="url" placeholder="Enter website URL" />
-      <select v-model="platform">
-        <option value="Desktop">Desktop</option>
-        <option value="Mobile">Mobile</option>
-      </select>
-      <button @click="checkPerformance">Check Performance</button>
-      <div v-if="performanceScore !== null">
-        <h3>Performance Score: {{ performanceScore }}</h3>
-      </div>
-    </div>
-  </div> -->
   <router-view></router-view>
 </template>
 
@@ -61,10 +46,7 @@ export default {
         localStorage.setItem('token', this.token);
 
       }
-      window.location.href = '/'
-
-      // window.location.reload();
-    }
+      window.location.href = '/'}
 
   },
 };

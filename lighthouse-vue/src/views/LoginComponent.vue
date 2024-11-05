@@ -1,34 +1,48 @@
 <template>
   <div class="form-container">
-
-    <!--  FORM ROW  -->
+    <!-- FORM ROW -->
     <div class="form-row">
-      <!--  LEFT COLUMN  -->
+      <!-- LEFT COLUMN -->
       <div class="left-column">
         <div class="login-form">
           <h1>Welcome Back, Muhammad</h1>
           <p>Welcome Back! Please enter your details!</p>
           <button class="google-btn" @click="loginWithGoogle">
-            <span class="icon"><img src="https://i.ibb.co/x5Hb7YC/google.png" alt="Login With Google"></span>
+            <span class="icon">
+              <img src="https://i.ibb.co/x5Hb7YC/google.png" alt="Login With Google">
+            </span>
             Login with Google
           </button>
           <div class="divider"> <span>Or</span> </div>
-          <form>
+          <form @submit.prevent="login">
             <div class="form-group">
-              <input type="email" class="field-wrap" placeholder="Email" required>
+              <input
+                  type="email"
+                  class="field-wrap"
+                  name="email"
+                  placeholder="Email"
+                  required
+                  v-model="email"
+              />
             </div>
             <div class="form-group">
-              <input type="password" class="field-wrap" placeholder="Password" required>
+              <input
+                  type="password"
+                  class="field-wrap"
+                  placeholder="Password"
+                  name="password"
+                  required
+                  v-model="password"
+              />
             </div>
             <button type="submit" class="signup-btn">Log in</button>
-
           </form>
         </div>
       </div>
-
     </div>
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -36,30 +50,44 @@ export default {
   name: 'LoginComponent',
   data() {
     return {
+      email: '',
+      password: '',
       token: localStorage.getItem('token'),
     };
   },
   methods: {
     loginWithGoogle() {
-      // window.location.href = 'http://localhost:8000/api/auth/google';
       window.location.href = `${this.$env.apiUrl}/api/auth/google`;
+    },
+    async login() {
+      try {
+        const response = await axios.post(`${this.$env.apiUrl}/api/auth/login`, {
+          email: this.email,
+          password: this.password,
+        });
+        // Handle successful login
+        localStorage.setItem('token', response.data.token);
+        this.token = response.data.token;
+        this.$router.push('/');
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed. Please check your credentials.');
+      }
     },
   },
   created() {
     const queryParams = new URLSearchParams(window.location.search);
-
     if (queryParams.has('token')) {
       if (localStorage.getItem('token') == null || localStorage.getItem('token') == '') {
         this.token = queryParams.get('token');
         localStorage.setItem('token', this.token);
-
       }
-      window.location.href = '/'
+      window.location.href = '/';
     }
-
   },
 }
 </script>
+
 
 <style scoped>
 
