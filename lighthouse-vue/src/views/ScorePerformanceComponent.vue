@@ -2,9 +2,12 @@
 
     <div class="seo-tools">
         <div class="seo-tools__trigger"></div>
-        <h1>Google Lighthouse<small></small></h1>
-        <div class="seo-tools__container">
-            <div class="seo-tools__form">
+        <h1>Google Lighthouse
+          <button @click="logout" class="seo-tools__button">Logout&nbsp;<i class="fas fa-angle-double-right fa-sign-out-alt"></i></button>
+          <small></small>
+        </h1>
+      <div class="seo-tools__container">
+          <div class="seo-tools__form">
                 <div class="seo-tools__form-label" >URL check</div>
                 <select class="seo-tools__protocol" v-model="platform">
                     <option value="Desktop" selected>Desktop</option>
@@ -18,10 +21,10 @@
                 </div>
 
                 <button @click="checkPerformance" class="seo-tools__button">Go&nbsp;<i class="fas fa-angle-double-right"></i></button>
-                <button @click="logout" class="seo-tools__button">Logout&nbsp;<i class="fas fa-angle-double-right fa-sign-out-alt"></i></button>
             </div>
 
-            <div class="seo-tools__results seo-tools__hidden-block" >
+
+          <div class="seo-tools__results seo-tools__hidden-block" >
                 <h5 class="seo-tools__results-title" >Results for: <i v-if="loading" class="fas fa-spinner"></i></h5>
                 Performance Score: {{ performanceScore }}
             </div>
